@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <link rel="stylesheet" href="global.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | Smart Parking UPI Tasikmalaya</title>
+  <style>
+    :root {
+      --blue: #2563eb;
+      --blue-dark: #1d4ed8;
+      --ink: #172033;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --surface: #ffffff;
+      --bg: #f3f7ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--ink); background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 55%, #e0ecff 100%);
+      display: flex; align-items: center; justify-content: center; padding: 24px;
+    }
+    .layout { width: min(100%, 980px); display: grid; grid-template-columns: 1fr 430px; background: var(--surface); border: 1px solid #e8eef8; border-radius: 24px; overflow: hidden; box-shadow: 0 24px 70px rgba(30, 64, 175, .12); }
+    .intro { padding: 48px; color: white; background: linear-gradient(145deg, #1d4ed8, #2563eb 60%, #3b82f6); display: flex; flex-direction: column; justify-content: space-between; min-height: 570px; position: relative; overflow: hidden; }
+    .intro:after { content: ""; position: absolute; width: 340px; height: 340px; border: 1px solid rgba(255,255,255,.2); border-radius: 50%; right: -130px; bottom: -120px; box-shadow: 0 0 0 35px rgba(255,255,255,.05), 0 0 0 75px rgba(255,255,255,.04); }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: .2px; position: relative; z-index: 1; }
+    .brand-icon { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 14px; background: rgba(255,255,255,.17); font-size: 25px; }
+    .intro-copy { position: relative; z-index: 1; max-width: 400px; }
+    .intro h1 { font-size: clamp(30px, 4vw, 43px); line-height: 1.13; margin: 0 0 18px; letter-spacing: -1.2px; }
+    .intro p { color: rgba(255,255,255,.84); line-height: 1.7; margin: 0; font-size: 15px; }
+    .feature-list { display: grid; gap: 14px; margin-top: 30px; }
+    .feature { display: flex; gap: 11px; align-items: center; color: rgba(255,255,255,.94); font-size: 14px; }
+    .check { width: 25px; height: 25px; display: grid; place-items: center; border-radius: 8px; background: rgba(255,255,255,.16); flex-shrink: 0; }
+    .copyright { position: relative; z-index: 1; color: rgba(255,255,255,.72); font-size: 12px; margin-top: 35px; }
+    .form-side { padding: 42px 36px; display: flex; flex-direction: column; justify-content: center; }
+    .mobile-brand { display: none; }
+    h2 { margin: 0 0 8px; font-size: 27px; letter-spacing: -.6px; }
+    .subtitle { color: var(--muted); font-size: 14px; line-height: 1.55; margin: 0 0 28px; }
+    label { display: block; font-size: 13px; font-weight: 650; margin: 0 0 8px; }
+    .field { margin-bottom: 18px; }
+    .input-wrap { position: relative; }
+    input, select { width: 100%; border: 1px solid var(--line); border-radius: 11px; padding: 13px 14px; background: #fff; font: inherit; font-size: 14px; color: var(--ink); outline: none; transition: border-color .2s, box-shadow .2s; }
+    input:focus, select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,.11); }
+    input[type="password"] { padding-right: 48px; }
+    .show-pass { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); border: 0; background: transparent; color: var(--muted); cursor: pointer; padding: 7px; font-size: 12px; }
+    .role-help { font-size: 12px; color: var(--muted); margin-top: 7px; line-height: 1.5; }
+    .submit { width: 100%; border: 0; border-radius: 11px; padding: 14px 16px; background: var(--blue); color: white; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 4px; box-shadow: 0 8px 18px rgba(37,99,235,.2); transition: background .2s, transform .2s; }
+    .submit:hover { background: var(--blue-dark); transform: translateY(-1px); }
+    .error { display: none; padding: 11px 12px; border-radius: 10px; background: #fef2f2; color: #b91c1c; font-size: 13px; margin: 0 0 16px; line-height: 1.45; }
+    .demo { margin-top: 22px; padding: 14px; background: #f8fafc; border: 1px solid #edf2f7; border-radius: 12px; }
+    .demo-title { font-size: 12px; font-weight: 700; margin-bottom: 9px; color: #475569; }
+    .demo-row { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; padding: 5px 0; color: #64748b; }
+    .demo-row strong { color: #334155; font-weight: 600; }
+    .security-note { font-size: 11px; color: #94a3b8; text-align: center; margin-top: 20px; line-height: 1.5; }
+    @media (max-width: 760px) {
+      body { padding: 14px; }
+      .layout { grid-template-columns: 1fr; max-width: 460px; }
+      .intro { display: none; }
+      .form-side { padding: 30px 24px; }
+      .mobile-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; font-weight: 700; color: var(--blue-dark); }
+      .mobile-brand .brand-icon { background: #eff6ff; }
+    }
+  </style>
+</head>
+<body>
+  <main class="layout">
+    <section class="intro">
+      <div class="brand">
+        <div class="brand-icon">🅿</div>
+        <div>Smart Parking<br><span style="font-size:12px;font-weight:500;opacity:.8">UPI Kampus Tasikmalaya</span></div>
+      </div>
+      <div class="intro-copy">
+        <h1>Pemantauan parkir, lebih mudah dan terarah.</h1>
+        <p>Masuk ke sistem Smart Parking untuk memantau kapasitas, ketersediaan slot, serta kondisi area parkir kampus.</p>
+        <div class="feature-list">
+          <div class="feature"><span class="check">✓</span> Pemantauan Area A dan Area B</div>
+          <div class="feature"><span class="check">✓</span> Ringkasan dan riwayat kondisi parkir</div>
+          <div class="feature"><span class="check">✓</span> Akses sesuai peran pengguna</div>
+        </div>
+      </div>
+      <div class="copyright">© Smart Parking · UPI Kampus Tasikmalaya</div>
+    </section>
+
+    <section class="form-side">
+      <div class="mobile-brand">
+        <div class="brand-icon">🅿</div>
+        <div>Smart Parking<br><span style="font-size:12px;font-weight:500;color:#64748b">UPI Kampus Tasikmalaya</span></div>
+      </div>
+      <h2>Selamat datang</h2>
+      <p class="subtitle">Silakan masuk menggunakan akun dan pilih peran sesuai kewenangan Anda.</p>
+
+      <div id="errorMessage" class="error" role="alert"></div>
+      <form id="loginForm">
+        <div class="field">
+          <label for="username">Username</label>
+          <input id="username" name="username" autocomplete="username" placeholder="Masukkan username" required />
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="input-wrap">
+            <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Masukkan password" required />
+            <button class="show-pass" type="button" id="togglePassword">Lihat</button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="role">Login sebagai</label>
+          <select id="role" name="role" required>
+            <option value="petugas">Petugas Parkir</option>
+            <option value="wadir">Wakil Direktur SDM (Wadir)</option>
+          </select>
+          <div class="role-help" id="roleHelp">Akses operasional: pemantauan area dan status slot parkir.</div>
+        </div>
+        <button class="submit" type="submit">Masuk ke Dashboard&nbsp; →</button>
+      </form>
+
+      <div class="demo">
+        <div class="demo-title">AKUN DEMO UNTUK PENGUJIAN</div>
+        <div class="demo-row"><span>Petugas Parkir</span><strong>petugas / petugas123</strong></div>
+        <div class="demo-row"><span>Wadir</span><strong>wadir / wadir123</strong></div>
+      </div>
+      <div class="security-note">Versi demo untuk pengembangan. Akun ini belum menggunakan autentikasi backend.</div>
+    </section>
+  </main>
+
+  <script>
+    const roleSelect = document.getElementById('role');
+    const roleHelp = document.getElementById('roleHelp');
+    const errorMessage = document.getElementById('errorMessage');
+
+    roleSelect.addEventListener('change', () => {
+      roleHelp.textContent = roleSelect.value === 'wadir'
+        ? 'Akses manajerial: ringkasan KPI, tren penggunaan, dan laporan parkir.'
+        : 'Akses operasional: pemantauan area dan status slot parkir.';
+    });
+
+    document.getElementById('togglePassword').addEventListener('click', () => {
+      const password = document.getElementById('password');
+      const isPassword = password.type === 'password';
+      password.type = isPassword ? 'text' : 'password';
+      document.getElementById('togglePassword').textContent = isPassword ? 'Sembunyikan' : 'Lihat';
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const username = document.getElementById('username').value.trim().toLowerCase();
+      const password = document.getElementById('password').value;
+      const role = roleSelect.value;
+
+      const accounts = {
+        petugas: { username: 'petugas', password: 'petugas123', displayName: 'Petugas Parkir', role: 'petugas' },
+        wadir: { username: 'wadir', password: 'wadir123', displayName: 'Wakil Direktur SDM', role: 'wadir' }
+      };
+      const account = accounts[role];
+
+      if (username !== account.username || password !== account.password) {
+        errorMessage.textContent = 'Username, password, atau pilihan peran tidak sesuai. Silakan coba lagi.';
+        errorMessage.style.display = 'block';
+        return;
+      }
+
+      errorMessage.style.display = 'none';
+      const session = {
+        username: account.username,
+        displayName: account.displayName,
+        role: account.role,
+        loginAt: new Date().toISOString()
+      };
+      localStorage.setItem('smartParkingUser', JSON.stringify(session));
+
+      // Dashboard utama yang sudah ada. Gunakan file ini dalam folder yang sama.
+      window.location.href = 'smart_parking_dashboard.html';
+    });
+  </script>
+</body>
+</html>

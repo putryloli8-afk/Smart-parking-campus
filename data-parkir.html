@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+  <link rel="stylesheet" href="global.css">
+  <script src="auth.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Parking - Data Parkir</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      body {
+        background: #f4f7fb;
+        color: #14213d;
+      }
+      .app {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      /* SIDEBAR */
+      .sidebar {
+        width: 245px;
+        background: #102f57;
+        color: white;
+        padding: 22px 15px;
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 12px 28px;
+      }
+      .brand-logo {
+        width: 55px;
+        height: 55px;
+        object-fit: contain;
+        border-radius: 10px;
+      }
+      .brand h2 {
+        font-size: 20px;
+      }
+      .brand p {
+        font-size: 12px;
+        color: #cbd8e8;
+        margin-top: 3px;
+      }
+      .menu {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .menu a {
+        text-decoration: none;
+        color: white;
+        padding: 14px 15px;
+        border-radius: 9px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 15px;
+      }
+      .menu a.active {
+        background: #ff0000;
+      }
+      .menu a:hover {
+        background: #1d4777;
+      }
+      .icon {
+        width: 22px;
+        text-align: center;
+        font-size: 18px;
+      }
+
+      /* MAIN */
+      .main {
+        margin-left: 245px;
+        width: calc(100% - 245px);
+        padding: 0 30px 35px;
+      }
+      .topbar {
+        height: 70px;
+        background: white;
+        margin: 0 -30px 25px;
+        padding: 0 30px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 18px;
+        border-bottom: 1px solid #e5eaf1;
+      }
+      .time {
+        font-size: 13px;
+        color: #53657d;
+        text-align: right;
+        line-height: 1.5;
+      }
+      .profile {
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #e9eef5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+      }
+      h1 {
+        font-size: 30px;
+        margin-bottom: 5px;
+      }
+      .subtitle {
+        color: #61728a;
+        margin-bottom: 24px;
+      }
+
+      /* AREA CARDS */
+      .area-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+        margin-bottom: 20px;
+      }
+      .card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 3px 14px rgba(20, 50, 90, 0.07);
+      }
+      .area-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 13px 15px;
+        border-radius: 9px;
+        margin-bottom: 18px;
+      }
+      .area-a .area-header {
+        background: #e4f1ff;
+      }
+      .area-b .area-header {
+        background: #ffe4e4;
+      }
+      .area-header h2 {
+        font-size: 21px;
+      }
+      .badge {
+        padding: 7px 20px;
+        border-radius: 20px;
+        color: white;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .available {
+        background: #0ca65a;
+      }
+      .almost {
+        background: #f04b4b;
+      }
+      .area-body {
+        display: grid;
+        grid-template-columns: 145px 1fr;
+        gap: 25px;
+        align-items: center;
+      }
+      .donut {
+        width: 135px;
+        height: 135px;
+        border-radius: 50%;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .donut:after {
+        content: "";
+        position: absolute;
+        width: 85px;
+        height: 85px;
+        border-radius: 50%;
+        background: white;
+      }
+      .donut-a {
+        background: conic-gradient(#17bf79 70%, #dfe4ea 0);
+      }
+      .donut-b {
+        background: conic-gradient(#f04b4b 95%, #dfe4ea 0);
+      }
+      .donut-text {
+        z-index: 2;
+        text-align: center;
+        font-weight: bold;
+        font-size: 20px;
+      }
+      .donut-text small {
+        display: block;
+        font-size: 11px;
+        color: #607089;
+        font-weight: normal;
+        margin-top: 4px;
+      }
+      .row {
+        display: flex;
+        justify-content: space-between;
+        padding: 9px 0;
+        border-bottom: 1px solid #edf0f4;
+        font-size: 14px;
+      }
+      .row:last-child {
+        border: 0;
+      }
+      .row span:first-child {
+        color: #607089;
+      }
+      .row b {
+        font-size: 14px;
+      }
+
+      /* CAMERA */
+      .camera-box {
+        margin-top: 18px;
+        border: 1px solid #e1e7ef;
+        border-radius: 9px;
+        overflow: hidden;
+        background: #edf2f7;
+      }
+      .camera-title {
+        padding: 10px 12px;
+        background: #f8fafc;
+        font-weight: bold;
+        font-size: 13px;
+      }
+      .camera-view {
+        height: 125px;
+        background: linear-gradient(135deg, #6d7780, #b8c0c7 50%, #69747d);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+      }
+      .camera-view:before {
+        content: "";
+        position: absolute;
+        width: 72%;
+        height: 45px;
+        background: #555e67;
+        transform: perspective(120px) rotateX(15deg);
+        border-top: 3px dashed #fff;
+        border-bottom: 3px dashed #fff;
+      }
+      .cars {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        gap: 18px;
+      }
+      .car {
+        width: 34px;
+        height: 52px;
+        border-radius: 8px;
+        background: #e8ecef;
+        border: 2px solid #b9c1c8;
+        box-shadow: 0 3px 5px #3336;
+      }
+      .car.green {
+        background: #20bd7c;
+        border-color: #0f925d;
+      }
+      .car.red {
+        background: #f04b4b;
+        border-color: #cf3030;
+      }
+      .camera-footer {
+        padding: 8px 12px;
+        font-size: 11px;
+        color: #607089;
+        background: white;
+      }
+
+      /* TABLE */
+      .table-card {
+        margin-top: 20px;
+      }
+      .table-wrap {
+        width: 100%;
+        overflow-x: auto;
+      }
+      .table-wrap table {
+        width: 100%;
+        min-width: 800px;
+        border-collapse: collapse;
+      }
+      .table-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+      .table-title {
+        font-size: 19px;
+      }
+      .refresh {
+        border: 0;
+        background: #1683e8;
+        color: white;
+        padding: 9px 16px;
+        border-radius: 7px;
+        cursor: pointer;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+      th {
+        background: #f1f5f9;
+        color: #53657d;
+        text-align: left;
+        padding: 12px;
+      }
+      td {
+        padding: 13px 12px;
+        border-bottom: 1px solid #edf0f4;
+      }
+      .status {
+        padding: 6px 12px;
+        border-radius: 15px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      .status.green {
+        background: #dcf7e9;
+        color: #0a8a4d;
+      }
+      .status.red {
+        background: #ffe0e0;
+        color: #d93232;
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 950px) {
+        .area-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 700px) {
+        .sidebar {
+          width: 70px;
+          padding: 15px 8px;
+        }
+        .brand div:not(.brand-icon),
+        .menu a span:not(.icon) {
+          display: none;
+        }
+        .brand {
+          padding: 8px 7px 28px;
+        }
+        .main {
+          margin-left: 70px;
+          width: calc(100% - 70px);
+          padding: 0 15px 25px;
+        }
+        .topbar {
+          margin: 0 -15px 20px;
+          padding: 0 15px;
+        }
+        .area-body {
+          grid-template-columns: 1fr;
+          justify-items: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="brand">
+          <img src="logo-parking.svg" class="brand-logo" />
+          <div>
+            <h2>Smart Parking</h2>
+            <p>UPI Tasikmalaya</p>
+          </div>
+        </div>
+        <nav class="menu">
+          <a href="smart_parking_dashboard.html"
+            ><span class="icon">⌂</span><span>Dashboard</span></a
+          >
+          <a class="active" href="data-parkir.html"
+            ><span class="icon">▣</span><span>Data Parkir</span></a
+          >
+          <a href="riwayat.html">
+            <span class="icon">◷</span>
+            <span>Riwayat</span>
+          </a>
+          <a href="pengaturan.html">
+            <span class="icon">⚙</span>
+            <span>Pengaturan</span>
+          </a>
+        </nav>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div class="time">
+            Senin, 29 Sep 2025<br /><b id="clock">13:45:20 WIB</b>
+          </div>
+          <a class="profile" href="profil.html" aria-label="Profil" title="Profil" style="text-decoration:none;color:inherit">👤</a>
+        </header>
+
+        <h1>Data Parkir</h1>
+        <p class="subtitle">
+          Informasi kondisi parkir pada setiap area secara aktual
+        </p>
+
+        <section class="area-grid">
+          <div class="card area-a">
+            <div class="area-header">
+              <h2>Area A</h2>
+              <span class="badge available" id="dpABadge">Tersedia</span>
+            </div>
+            \
+            <div class="area-body">
+              <div class="donut donut-a">
+                <div class="donut-text" id="dpAPercent">70%<small>Terisi</small></div>
+              </div>
+              <div>
+                <div class="row"><span>Kapasitas</span><b id="dpACapacity">50 slot</b></div>
+                <div class="row"><span>Terisi</span><b id="dpAOccupied">35 kendaraan</b></div>
+                <div class="row"><span>Tersedia</span><b id="dpAAvailable">15 slot</b></div>
+                <div class="row">
+                  <span>Update terakhir</span><b id="dpAUpdate">13:45:20 WIB</b>
+                </div>
+              </div>
+            </div>
+            <div class="camera-box">
+              <div class="camera-title">📷 Tampilan Kamera Area A</div>
+              <div class="camera-view">
+                <div class="cars">
+                  <div class="car green"></div>
+                  <div class="car green"></div>
+                  <div class="car"></div>
+                  <div class="car green"></div>
+                </div>
+              </div>
+              <div class="camera-footer">
+                Kamera: Online &nbsp; | &nbsp; Deteksi kendaraan aktif
+              </div>
+            </div>
+          </div>
+
+          <div class="card area-b">
+            <div class="area-header">
+              <h2>Area B</h2>
+              <span class="badge almost" id="dpBBadge">Hampir Penuh</span>
+            </div>
+            <div class="area-body">
+              <div class="donut donut-b">
+                <div class="donut-text" id="dpBPercent">95%<small>Terisi</small></div>
+              </div>
+              <div>
+                <div class="row"><span>Kapasitas</span><b id="dpBCapacity">40 slot</b></div>
+                <div class="row"><span>Terisi</span><b id="dpBOccupied">38 kendaraan</b></div>
+                <div class="row"><span>Tersedia</span><b id="dpBAvailable">2 slot</b></div>
+                <div class="row">
+                  <span>Update terakhir</span><b id="dpBUpdate">13:45:20 WIB</b>
+                </div>
+              </div>
+            </div>
+            <div class="camera-box">
+              <div class="camera-title">📷 Tampilan Kamera Area B</div>
+              <div class="camera-view">
+                <div class="cars">
+                  <div class="car red"></div>
+                  <div class="car red"></div>
+                  <div class="car red"></div>
+                  <div class="car red"></div>
+                </div>
+              </div>
+              <div class="camera-footer">
+                Kamera: Online &nbsp; | &nbsp; Deteksi kendaraan aktif
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card table-card">
+          <div class="table-head">
+            <h2 class="table-title">Ringkasan Data Parkir</h2>
+            <button class="refresh" onclick="updateData()">
+              ↻ Perbarui Data
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Area Parkir</th>
+                  <th>Kapasitas</th>
+                  <th>Terisi</th>
+                  <th>Tersedia</th>
+                  <th>Persentase</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="parkingTable">
+                <tr>
+                  <td>1</td>
+                  <td>Area A</td>
+                  <td>50 slot</td>
+                  <td>35 kendaraan</td>
+                  <td>15 slot</td>
+                  <td>70%</td>
+                  <td><span class="status green">Tersedia</span></td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Area B</td>
+                  <td>40 slot</td>
+                  <td>38 kendaraan</td>
+                  <td>2 slot</td>
+                  <td>95%</td>
+                  <td><span class="status red">Hampir Penuh</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  <script src="smart-parking.js"></script>
+  
+  <div style="position:fixed;right:18px;bottom:18px;z-index:9999">
+    <button type="button" data-sp-logout style="border:0;border-radius:10px;padding:10px 14px;background:#1d4ed8;color:#fff;cursor:pointer;box-shadow:0 4px 16px #0f172a22">Keluar</button>
+  </div>
+
+</body>
+</html>

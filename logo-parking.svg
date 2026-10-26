@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Smart Parking">
+<rect width="128" height="128" rx="24" fill="#163c70"/>
+<rect x="16" y="16" width="96" height="96" rx="18" fill="#fff" opacity=".1"/>
+<path d="M43 25h29c19 0 31 12 31 30S91 85 72 85H60v18H43V25zm17 16v28h12c9 0 14-5 14-14S81 41 72 41H60z" fill="#fff"/>
+<path d="M22 108h84" stroke="#93c5fd" stroke-width="5" stroke-linecap="round"/>
+</svg>
